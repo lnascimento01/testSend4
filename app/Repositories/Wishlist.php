@@ -8,6 +8,10 @@ class Wishlist extends Repository {
 
     protected $table = 'user_favs';
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public function setFavorite($data = []) {
         return DB::table($this->table)
             ->insert([
@@ -16,6 +20,10 @@ class Wishlist extends Repository {
             ]);
     }
 
+    /**
+     * @param $idFav
+     * @return int
+     */
     public function delFavorite($idFav) {
         return DB::table($this->table)
             ->where(
@@ -24,6 +32,10 @@ class Wishlist extends Repository {
             ->delete();
     }
 
+    /**
+     * @param $idUser
+     * @return int
+     */
     public function clearFavorites($idUser) {
         return DB::table($this->table)
             ->where(
@@ -32,6 +44,10 @@ class Wishlist extends Repository {
             ->delete();
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     public function checkFavorite($data = []) {
         return DB::table($this->table)
             ->where(
@@ -41,5 +57,14 @@ class Wishlist extends Repository {
                 ]
             )
             ->get("id")->toArray();
+    }
+
+    public function getFavorites($idUser) {
+        return DB::table($this->table)
+            ->where(
+                "id_user", "=", $idUser
+            )
+            ->get()
+            ->toArray();
     }
 }

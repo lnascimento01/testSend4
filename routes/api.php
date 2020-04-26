@@ -22,6 +22,7 @@ Route::get('user', 'AuthenticationController@getAuthUser');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('/')->group(function () {
         Route::get('/', 'HomeController@index');
+        Route::get('wishlist', 'WishlistController@getFavs');
         Route::post('wishlist', 'WishlistController@handleFav');
     });
 });

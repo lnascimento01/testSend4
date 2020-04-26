@@ -39,4 +39,12 @@ class WishlistController extends Controller {
         }
         return response()->json($wishlist->handleFavorite($idProduct));
     }
+
+    /**
+     * @param Wishlist $wishlist
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getFavs(Wishlist $wishlist) {
+        return response()->json($wishlist->listFavs());
+    }
 }

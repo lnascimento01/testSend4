@@ -39,6 +39,7 @@ class Wishlist {
     }
 
     /**
+     * Validate if the wishlist already have the product
      * @param $idProduct
      * @return WishlistRepo
      */
@@ -49,5 +50,9 @@ class Wishlist {
                 "idUser" => $this->user['id']
             ]
         );
+    }
+
+    public function listFavs() {
+        return $this->whishlistRepo->getFavorites($this->user['id']);
     }
 }
