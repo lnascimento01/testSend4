@@ -37,6 +37,7 @@ class WishlistController extends Controller {
         } catch (\Throwable $e) {
             return report($e);
         }
+
         return response()->json($wishlist->handleFavorite($idProduct));
     }
 

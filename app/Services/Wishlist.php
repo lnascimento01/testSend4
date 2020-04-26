@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\MailFavorites;
 use App\Repositories\Wishlist as WishlistRepo;
 
 class Wishlist {
@@ -27,15 +28,19 @@ class Wishlist {
         $validate = $this->validateProdFav($idProduct);
 
         if ($validate) {
-            return $this->whishlistRepo->delFavorite(current($validate)->id);
+            $return = $this->whishlistRepo->delFavorite(current($validate)->id);
         } else {
-            return $this->whishlistRepo->setFavorite(
+            $return = $this->whishlistRepo->setFavorite(
                 [
                     "idProduct" => $idProduct,
                     "idUser" => $this->user['id']
                 ]
             );
         }
+
+        MailFavorites::dispatch($this->user['email'])->delay(now()->addMinutes(2));
+
+        return $return;
     }
 
     /**
@@ -52,7 +57,17 @@ class Wishlist {
         );
     }
 
+    /**
+     * @return array
+     */
     public function listFavs() {
         return $this->whishlistRepo->getFavorites($this->user['id']);
+    }
+
+    /**
+     * @param $payload
+     */
+    public function sendMail($payload) {
+        echo "Email enviado";
     }
 }

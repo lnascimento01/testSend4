@@ -59,6 +59,10 @@ class Wishlist extends Repository {
             ->get("id")->toArray();
     }
 
+    /**
+     * @param $idUser
+     * @return array
+     */
     public function getFavorites($idUser) {
         return DB::table($this->table)
             ->where(
