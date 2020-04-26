@@ -20,7 +20,8 @@ Route::get('logout', 'AuthenticationController@logout');
 Route::get('user', 'AuthenticationController@getAuthUser');
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::prefix('home')->group(function () {
+    Route::prefix('/')->group(function () {
         Route::get('/', 'HomeController@index');
+        Route::post('wishlist', 'WishlistController@handleFav');
     });
 });
