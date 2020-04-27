@@ -14,14 +14,17 @@ class AuthenticationController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request) {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
 
-        $token = auth()->login($user);
-
+            $token = auth()->login($user);
+        } catch (\Throwable $e) {
+            report($e);
+        }
         return $this->respondWithToken($token);
     }
 
@@ -30,12 +33,15 @@ class AuthenticationController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request) {
-        $credentials = $request->only(['email', 'password']);
+        try {
+            $credentials = $request->only(['email', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            if (!$token = auth()->attempt($credentials)) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        } catch (\Throwable $e) {
+            report($e);
         }
-
         return $this->respondWithToken($token);
     }
 

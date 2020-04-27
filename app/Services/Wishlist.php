@@ -63,9 +63,13 @@ class Wishlist {
      * @return array
      */
     public function listFavs() {
-        $favorites       = $this->whishlistRepo->getFavorites($this->user['id']);
-        $arraProductsIds = array_column($favorites, "id_product");
+        try {
 
+            $favorites       = $this->whishlistRepo->getFavorites($this->user['id']);
+            $arraProductsIds = array_column($favorites, "id_product");
+        } catch (\Throwable $e) {
+            report($e);
+        }
         return $this->getProductDetail(implode(",", $arraProductsIds));
     }
 
