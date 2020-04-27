@@ -69,6 +69,10 @@ class Wishlist {
         return $this->getProductDetail(implode(",", $arraProductsIds));
     }
 
+    /**
+     * @param $strProducts
+     * @return mixed
+     */
     public function getProductDetail($strProducts) {
         $endpointSetup = curl_init($this->endpoint_prodcut . "?ids=" . $strProducts);
 
