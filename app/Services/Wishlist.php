@@ -8,6 +8,8 @@ use App\Repositories\Wishlist as WishlistRepo;
 class Wishlist {
     private $user;
     public $whishlistRepo;
+    public $endpoint_prodcut =
+        "https://269a1ec67dfdd434dfc8622a0ed77768:4e788173c35d04421ab4793044be622f@send4-avaliacao.myshopify.com/admin/api/2020-04/products.json";
 
     /**
      * Wishlist constructor.
@@ -61,7 +63,19 @@ class Wishlist {
      * @return array
      */
     public function listFavs() {
-        return $this->whishlistRepo->getFavorites($this->user['id']);
+        $favorites       = $this->whishlistRepo->getFavorites($this->user['id']);
+        $arraProductsIds = array_column($favorites, "id_product");
+
+        return $this->getProductDetail(implode(",", $arraProductsIds));
+    }
+
+    public function getProductDetail($strProducts) {
+        $endpointSetup = curl_init($this->endpoint_prodcut . "?ids=" . $strProducts);
+
+        curl_setopt($endpointSetup, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($endpointSetup);
+
+        return json_decode($response);
     }
 
     /**
